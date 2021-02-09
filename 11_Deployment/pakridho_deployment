@@ -1,0 +1,1434 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "id": "naked-polls",
+   "metadata": {},
+   "source": [
+    "## Deployment"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "id": "unavailable-orbit",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import pandas as pd\n",
+    "import numpy as np\n",
+    "\n",
+    "import seaborn as sns\n",
+    "import matplotlib.pyplot as plt"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "id": "royal-intervention",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>fixed acidity</th>\n",
+       "      <th>volatile acidity</th>\n",
+       "      <th>citric acid</th>\n",
+       "      <th>residual sugar</th>\n",
+       "      <th>chlorides</th>\n",
+       "      <th>free sulfur dioxide</th>\n",
+       "      <th>total sulfur dioxide</th>\n",
+       "      <th>density</th>\n",
+       "      <th>pH</th>\n",
+       "      <th>sulphates</th>\n",
+       "      <th>alcohol</th>\n",
+       "      <th>quality</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>7.0</td>\n",
+       "      <td>0.27</td>\n",
+       "      <td>0.36</td>\n",
+       "      <td>20.7</td>\n",
+       "      <td>0.045</td>\n",
+       "      <td>45.0</td>\n",
+       "      <td>170.0</td>\n",
+       "      <td>1.0010</td>\n",
+       "      <td>3.00</td>\n",
+       "      <td>0.45</td>\n",
+       "      <td>8.8</td>\n",
+       "      <td>6.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>6.3</td>\n",
+       "      <td>0.30</td>\n",
+       "      <td>0.34</td>\n",
+       "      <td>1.6</td>\n",
+       "      <td>0.049</td>\n",
+       "      <td>14.0</td>\n",
+       "      <td>132.0</td>\n",
+       "      <td>0.9940</td>\n",
+       "      <td>3.30</td>\n",
+       "      <td>0.49</td>\n",
+       "      <td>9.5</td>\n",
+       "      <td>6.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>8.1</td>\n",
+       "      <td>0.28</td>\n",
+       "      <td>0.40</td>\n",
+       "      <td>6.9</td>\n",
+       "      <td>0.050</td>\n",
+       "      <td>30.0</td>\n",
+       "      <td>97.0</td>\n",
+       "      <td>0.9951</td>\n",
+       "      <td>3.26</td>\n",
+       "      <td>0.44</td>\n",
+       "      <td>10.1</td>\n",
+       "      <td>6.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>7.2</td>\n",
+       "      <td>0.23</td>\n",
+       "      <td>0.32</td>\n",
+       "      <td>8.5</td>\n",
+       "      <td>0.058</td>\n",
+       "      <td>47.0</td>\n",
+       "      <td>186.0</td>\n",
+       "      <td>0.9956</td>\n",
+       "      <td>3.19</td>\n",
+       "      <td>0.40</td>\n",
+       "      <td>9.9</td>\n",
+       "      <td>6.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>7.2</td>\n",
+       "      <td>0.23</td>\n",
+       "      <td>0.32</td>\n",
+       "      <td>8.5</td>\n",
+       "      <td>0.058</td>\n",
+       "      <td>47.0</td>\n",
+       "      <td>186.0</td>\n",
+       "      <td>0.9956</td>\n",
+       "      <td>3.19</td>\n",
+       "      <td>0.40</td>\n",
+       "      <td>9.9</td>\n",
+       "      <td>6.0</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "   fixed acidity  volatile acidity  citric acid  residual sugar  chlorides  \\\n",
+       "0            7.0              0.27         0.36            20.7      0.045   \n",
+       "1            6.3              0.30         0.34             1.6      0.049   \n",
+       "2            8.1              0.28         0.40             6.9      0.050   \n",
+       "3            7.2              0.23         0.32             8.5      0.058   \n",
+       "4            7.2              0.23         0.32             8.5      0.058   \n",
+       "\n",
+       "   free sulfur dioxide  total sulfur dioxide  density    pH  sulphates  \\\n",
+       "0                 45.0                 170.0   1.0010  3.00       0.45   \n",
+       "1                 14.0                 132.0   0.9940  3.30       0.49   \n",
+       "2                 30.0                  97.0   0.9951  3.26       0.44   \n",
+       "3                 47.0                 186.0   0.9956  3.19       0.40   \n",
+       "4                 47.0                 186.0   0.9956  3.19       0.40   \n",
+       "\n",
+       "   alcohol  quality  \n",
+       "0      8.8      6.0  \n",
+       "1      9.5      6.0  \n",
+       "2     10.1      6.0  \n",
+       "3      9.9      6.0  \n",
+       "4      9.9      6.0  "
+      ]
+     },
+     "execution_count": 2,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "wine = pd.read_csv('white_wine.csv')\n",
+    "wine.head()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "reduced-machinery",
+   "metadata": {},
+   "source": [
+    "### Preprocess"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "id": "front-liability",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "C:\\Users\\R7891\\Anaconda3\\lib\\site-packages\\seaborn\\distributions.py:2551: FutureWarning: `distplot` is a deprecated function and will be removed in a future version. Please adapt your code to use either `displot` (a figure-level function with similar flexibility) or `histplot` (an axes-level function for histograms).\n",
+      "  warnings.warn(msg, FutureWarning)\n"
+     ]
+    },
+    {
+     "data": {
+      "text/plain": [
+       "<AxesSubplot:xlabel='fixed acidity', ylabel='Density'>"
+      ]
+     },
+     "execution_count": 3,
+     "metadata": {},
+     "output_type": "execute_result"
+    },
+    {
+     "data": {
+      "image/png": "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\n",
+      "text/plain": [
+       "<Figure size 432x288 with 1 Axes>"
+      ]
+     },
+     "metadata": {
+      "needs_background": "light"
+     },
+     "output_type": "display_data"
+    }
+   ],
+   "source": [
+    "sns.distplot(wine['fixed acidity'])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "id": "recorded-occasions",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "C:\\Users\\R7891\\Anaconda3\\lib\\site-packages\\seaborn\\distributions.py:2551: FutureWarning: `distplot` is a deprecated function and will be removed in a future version. Please adapt your code to use either `displot` (a figure-level function with similar flexibility) or `histplot` (an axes-level function for histograms).\n",
+      "  warnings.warn(msg, FutureWarning)\n"
+     ]
+    },
+    {
+     "data": {
+      "text/plain": [
+       "<AxesSubplot:xlabel='chlorides', ylabel='Density'>"
+      ]
+     },
+     "execution_count": 4,
+     "metadata": {},
+     "output_type": "execute_result"
+    },
+    {
+     "data": {
+      "image/png": "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\n",
+      "text/plain": [
+       "<Figure size 432x288 with 1 Axes>"
+      ]
+     },
+     "metadata": {
+      "needs_background": "light"
+     },
+     "output_type": "display_data"
+    }
+   ],
+   "source": [
+    "sns.distplot(wine['chlorides'])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "id": "surrounded-terrorist",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def binning_acidity(value):\n",
+    "    if value > 8:\n",
+    "        result = 'high'\n",
+    "    elif value > 6.5:\n",
+    "        result = 'medium'\n",
+    "    else:\n",
+    "        result = 'low'\n",
+    "    return result\n",
+    "\n",
+    "def binning_chlorides(value):\n",
+    "    if value > 0.07:\n",
+    "        result = 'high'\n",
+    "    elif value > 0.05:\n",
+    "        result = 'medium'\n",
+    "    else:\n",
+    "        result = 'low'\n",
+    "    return result\n",
+    "\n",
+    "def labeling(value):\n",
+    "    if value > 6:\n",
+    "        result=1\n",
+    "    else:\n",
+    "        result=0\n",
+    "    return result"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "id": "fitted-lodging",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "wine['fixed acidity level'] = wine['fixed acidity'].apply(binning_acidity)\n",
+    "wine['chlorides level'] = wine['chlorides'].apply(binning_chlorides)\n",
+    "wine['label'] = wine['quality'].apply(labeling)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "id": "resistant-probability",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "fixed acidity           0\n",
+       "volatile acidity        0\n",
+       "citric acid             0\n",
+       "residual sugar          0\n",
+       "chlorides               0\n",
+       "free sulfur dioxide     0\n",
+       "total sulfur dioxide    0\n",
+       "density                 0\n",
+       "pH                      1\n",
+       "sulphates               1\n",
+       "alcohol                 1\n",
+       "quality                 1\n",
+       "fixed acidity level     0\n",
+       "chlorides level         0\n",
+       "label                   0\n",
+       "dtype: int64"
+      ]
+     },
+     "execution_count": 7,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "wine.isna().sum()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "id": "confidential-jordan",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "wine.dropna(inplace=True)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "id": "hollow-missile",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "wine_deploy = wine[['alcohol', 'density', 'fixed acidity level', 'chlorides level', 'label']]\n",
+    "wine_train = wine_deploy[:400]\n",
+    "wine_test = wine_deploy[400:]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "id": "virtual-wings",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "wine_train.to_csv('wine_train.csv', index=False)\n",
+    "wine_test.to_csv('wine_test.csv', index=False)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 11,
+   "id": "aggregate-pursuit",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>alcohol</th>\n",
+       "      <th>density</th>\n",
+       "      <th>fixed acidity level</th>\n",
+       "      <th>chlorides level</th>\n",
+       "      <th>label</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>8.8</td>\n",
+       "      <td>1.0010</td>\n",
+       "      <td>medium</td>\n",
+       "      <td>low</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>9.5</td>\n",
+       "      <td>0.9940</td>\n",
+       "      <td>low</td>\n",
+       "      <td>low</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>10.1</td>\n",
+       "      <td>0.9951</td>\n",
+       "      <td>high</td>\n",
+       "      <td>low</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>9.9</td>\n",
+       "      <td>0.9956</td>\n",
+       "      <td>medium</td>\n",
+       "      <td>medium</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>9.9</td>\n",
+       "      <td>0.9956</td>\n",
+       "      <td>medium</td>\n",
+       "      <td>medium</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>...</th>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>395</th>\n",
+       "      <td>10.0</td>\n",
+       "      <td>0.9920</td>\n",
+       "      <td>medium</td>\n",
+       "      <td>low</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>396</th>\n",
+       "      <td>11.4</td>\n",
+       "      <td>0.9917</td>\n",
+       "      <td>high</td>\n",
+       "      <td>low</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>397</th>\n",
+       "      <td>11.4</td>\n",
+       "      <td>0.9917</td>\n",
+       "      <td>low</td>\n",
+       "      <td>low</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>398</th>\n",
+       "      <td>9.4</td>\n",
+       "      <td>0.9993</td>\n",
+       "      <td>low</td>\n",
+       "      <td>low</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>399</th>\n",
+       "      <td>11.7</td>\n",
+       "      <td>0.9908</td>\n",
+       "      <td>low</td>\n",
+       "      <td>low</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "<p>400 rows × 5 columns</p>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "     alcohol  density fixed acidity level chlorides level  label\n",
+       "0        8.8   1.0010              medium             low      0\n",
+       "1        9.5   0.9940                 low             low      0\n",
+       "2       10.1   0.9951                high             low      0\n",
+       "3        9.9   0.9956              medium          medium      0\n",
+       "4        9.9   0.9956              medium          medium      0\n",
+       "..       ...      ...                 ...             ...    ...\n",
+       "395     10.0   0.9920              medium             low      0\n",
+       "396     11.4   0.9917                high             low      0\n",
+       "397     11.4   0.9917                 low             low      0\n",
+       "398      9.4   0.9993                 low             low      0\n",
+       "399     11.7   0.9908                 low             low      0\n",
+       "\n",
+       "[400 rows x 5 columns]"
+      ]
+     },
+     "execution_count": 11,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "wine_train = pd.read_csv('wine_train.csv')\n",
+    "wine_train"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "spectacular-breathing",
+   "metadata": {},
+   "source": [
+    "## Model Training"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 12,
+   "id": "attractive-pharmaceutical",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Basic Operations\n",
+    "import pandas as pd\n",
+    "import numpy as np\n",
+    "\n",
+    "# ML Models\n",
+    "from sklearn.linear_model import LogisticRegression\n",
+    "\n",
+    "# Feature Engineering\n",
+    "from sklearn.pipeline import Pipeline\n",
+    "from sklearn.preprocessing import OneHotEncoder, PolynomialFeatures\n",
+    "from sklearn.compose import ColumnTransformer\n",
+    "\n",
+    "# Evaluation\n",
+    "from sklearn.model_selection import GridSearchCV\n",
+    "from sklearn.model_selection import cross_val_score, StratifiedKFold\n",
+    "from sklearn.model_selection import train_test_split\n",
+    "from sklearn.metrics import f1_score\n",
+    "\n",
+    "# Model\n",
+    "import pickle\n",
+    "import joblib"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 13,
+   "id": "bridal-lebanon",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "poly = PolynomialFeatures(degree = 3, include_bias=False)\n",
+    "one_hot = OneHotEncoder(drop='first')\n",
+    "\n",
+    "transformer = ColumnTransformer([\n",
+    "    ('poly', poly, ['alcohol', 'density']),\n",
+    "    ('onehot', one_hot, ['fixed acidity level', 'chlorides level'])\n",
+    "])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 14,
+   "id": "adjacent-chambers",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "X = wine_train.drop(columns='label')\n",
+    "y = wine_train['label']\n",
+    "\n",
+    "X_train_val, X_test, y_train_val, y_test = train_test_split(X, y, stratify=y, random_state=2020)\n",
+    "\n",
+    "model = LogisticRegression(solver='liblinear', random_state=2020)\n",
+    "\n",
+    "estimator = Pipeline([\n",
+    "    ('preprocess', transformer),\n",
+    "    ('clf', model)\n",
+    "])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 17,
+   "id": "resistant-confusion",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "{'memory': None,\n",
+       " 'steps': [('preprocess',\n",
+       "   ColumnTransformer(transformers=[('poly',\n",
+       "                                    PolynomialFeatures(degree=3,\n",
+       "                                                       include_bias=False),\n",
+       "                                    ['alcohol', 'density']),\n",
+       "                                   ('onehot', OneHotEncoder(drop='first'),\n",
+       "                                    ['fixed acidity level', 'chlorides level'])])),\n",
+       "  ('clf', LogisticRegression(random_state=2020, solver='liblinear'))],\n",
+       " 'verbose': False,\n",
+       " 'preprocess': ColumnTransformer(transformers=[('poly',\n",
+       "                                  PolynomialFeatures(degree=3,\n",
+       "                                                     include_bias=False),\n",
+       "                                  ['alcohol', 'density']),\n",
+       "                                 ('onehot', OneHotEncoder(drop='first'),\n",
+       "                                  ['fixed acidity level', 'chlorides level'])]),\n",
+       " 'clf': LogisticRegression(random_state=2020, solver='liblinear'),\n",
+       " 'preprocess__n_jobs': None,\n",
+       " 'preprocess__remainder': 'drop',\n",
+       " 'preprocess__sparse_threshold': 0.3,\n",
+       " 'preprocess__transformer_weights': None,\n",
+       " 'preprocess__transformers': [('poly',\n",
+       "   PolynomialFeatures(degree=3, include_bias=False),\n",
+       "   ['alcohol', 'density']),\n",
+       "  ('onehot',\n",
+       "   OneHotEncoder(drop='first'),\n",
+       "   ['fixed acidity level', 'chlorides level'])],\n",
+       " 'preprocess__verbose': False,\n",
+       " 'preprocess__poly': PolynomialFeatures(degree=3, include_bias=False),\n",
+       " 'preprocess__onehot': OneHotEncoder(drop='first'),\n",
+       " 'preprocess__poly__degree': 3,\n",
+       " 'preprocess__poly__include_bias': False,\n",
+       " 'preprocess__poly__interaction_only': False,\n",
+       " 'preprocess__poly__order': 'C',\n",
+       " 'preprocess__onehot__categories': 'auto',\n",
+       " 'preprocess__onehot__drop': 'first',\n",
+       " 'preprocess__onehot__dtype': numpy.float64,\n",
+       " 'preprocess__onehot__handle_unknown': 'error',\n",
+       " 'preprocess__onehot__sparse': True,\n",
+       " 'clf__C': 1.0,\n",
+       " 'clf__class_weight': None,\n",
+       " 'clf__dual': False,\n",
+       " 'clf__fit_intercept': True,\n",
+       " 'clf__intercept_scaling': 1,\n",
+       " 'clf__l1_ratio': None,\n",
+       " 'clf__max_iter': 100,\n",
+       " 'clf__multi_class': 'auto',\n",
+       " 'clf__n_jobs': None,\n",
+       " 'clf__penalty': 'l2',\n",
+       " 'clf__random_state': 2020,\n",
+       " 'clf__solver': 'liblinear',\n",
+       " 'clf__tol': 0.0001,\n",
+       " 'clf__verbose': 0,\n",
+       " 'clf__warm_start': False}"
+      ]
+     },
+     "execution_count": 17,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "estimator.get_params()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 18,
+   "id": "harmful-forty",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "GridSearchCV(cv=StratifiedKFold(n_splits=5, random_state=None, shuffle=False),\n",
+       "             estimator=Pipeline(steps=[('preprocess',\n",
+       "                                        ColumnTransformer(transformers=[('poly',\n",
+       "                                                                         PolynomialFeatures(degree=3,\n",
+       "                                                                                            include_bias=False),\n",
+       "                                                                         ['alcohol',\n",
+       "                                                                          'density']),\n",
+       "                                                                        ('onehot',\n",
+       "                                                                         OneHotEncoder(drop='first'),\n",
+       "                                                                         ['fixed '\n",
+       "                                                                          'acidity '\n",
+       "                                                                          'level',\n",
+       "                                                                          'chlorides '\n",
+       "                                                                          'level'])])),\n",
+       "                                       ('clf',\n",
+       "                                        LogisticRegression(random_state=2020,\n",
+       "                                                           solver='liblinear'))]),\n",
+       "             n_jobs=-1,\n",
+       "             param_grid={'clf__C': [100, 10, 1, 0.1, 0.01, 0.001],\n",
+       "                         'clf__solver': ['liblinear', 'newton-cg']},\n",
+       "             scoring='f1')"
+      ]
+     },
+     "execution_count": 18,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "hyperparam_space = {\n",
+    "    'clf__C':[100,10,1,0.1,0.01,0.001],\n",
+    "    'clf__solver':['liblinear', 'newton-cg']\n",
+    "}\n",
+    "\n",
+    "skfold = StratifiedKFold(n_splits=5)\n",
+    "\n",
+    "grid = GridSearchCV(\n",
+    "    estimator, # model yang mau di tune\n",
+    "    param_grid = hyperparam_space, # hyperparameter option\n",
+    "    cv = skfold, # evaluation method\n",
+    "    scoring = 'f1', # metrics\n",
+    "    n_jobs = -1\n",
+    ")\n",
+    "\n",
+    "grid.fit(X_train_val, y_train_val)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 20,
+   "id": "modified-overall",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "Pipeline(steps=[('preprocess',\n",
+       "                 ColumnTransformer(transformers=[('poly',\n",
+       "                                                  PolynomialFeatures(degree=3,\n",
+       "                                                                     include_bias=False),\n",
+       "                                                  ['alcohol', 'density']),\n",
+       "                                                 ('onehot',\n",
+       "                                                  OneHotEncoder(drop='first'),\n",
+       "                                                  ['fixed acidity level',\n",
+       "                                                   'chlorides level'])])),\n",
+       "                ('clf',\n",
+       "                 LogisticRegression(C=100, random_state=2020,\n",
+       "                                    solver='liblinear'))])"
+      ]
+     },
+     "execution_count": 20,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "logit_tuned = grid.best_estimator_\n",
+    "logit_tuned.fit(X_train_val, y_train_val)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 23,
+   "id": "revised-bleeding",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "              precision    recall  f1-score   support\n",
+      "\n",
+      "           0       0.99      0.96      0.97        81\n",
+      "           1       0.86      0.95      0.90        19\n",
+      "\n",
+      "    accuracy                           0.96       100\n",
+      "   macro avg       0.92      0.96      0.94       100\n",
+      "weighted avg       0.96      0.96      0.96       100\n",
+      "\n"
+     ]
+    }
+   ],
+   "source": [
+    "from sklearn.metrics import classification_report\n",
+    "print(classification_report(y_test, logit_tuned.predict(X_test)))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "signal-labor",
+   "metadata": {},
+   "source": [
+    "## Pickle Save"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 24,
+   "id": "efficient-technique",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "logit_tuned.fit(X,y)\n",
+    "filename = 'logit_final.sav'\n",
+    "pickle.dump(logit_tuned, open(filename, 'wb'))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "destroyed-seller",
+   "metadata": {},
+   "source": [
+    "## Pickle Load"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 25,
+   "id": "rotary-sitting",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "filename = 'logit_final.sav'\n",
+    "loaded_model = pickle.load((open(filename, 'rb')))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 26,
+   "id": "preliminary-cargo",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "Pipeline(steps=[('preprocess',\n",
+       "                 ColumnTransformer(transformers=[('poly',\n",
+       "                                                  PolynomialFeatures(degree=3,\n",
+       "                                                                     include_bias=False),\n",
+       "                                                  ['alcohol', 'density']),\n",
+       "                                                 ('onehot',\n",
+       "                                                  OneHotEncoder(drop='first'),\n",
+       "                                                  ['fixed acidity level',\n",
+       "                                                   'chlorides level'])])),\n",
+       "                ('clf',\n",
+       "                 LogisticRegression(C=100, random_state=2020,\n",
+       "                                    solver='liblinear'))])"
+      ]
+     },
+     "execution_count": 26,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "loaded_model"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 29,
+   "id": "sporting-coaching",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "wine_test = pd.read_csv('wine_test.csv')\n",
+    "wine_X = wine_test.drop(columns='label') # --> kaggle competition: data yang kita punya\n",
+    "wine_y = wine_test['label'] # --> kaggle competition: data yang disimpan penyelenggara"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 31,
+   "id": "suspended-strap",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>alcohol</th>\n",
+       "      <th>density</th>\n",
+       "      <th>fixed acidity level</th>\n",
+       "      <th>chlorides level</th>\n",
+       "      <th>label</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>11.4</td>\n",
+       "      <td>0.9917</td>\n",
+       "      <td>low</td>\n",
+       "      <td>low</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>8.8</td>\n",
+       "      <td>0.9976</td>\n",
+       "      <td>medium</td>\n",
+       "      <td>low</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>9.2</td>\n",
+       "      <td>0.9934</td>\n",
+       "      <td>low</td>\n",
+       "      <td>medium</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>8.7</td>\n",
+       "      <td>1.0000</td>\n",
+       "      <td>medium</td>\n",
+       "      <td>low</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>12.6</td>\n",
+       "      <td>0.9918</td>\n",
+       "      <td>medium</td>\n",
+       "      <td>low</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>...</th>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>114</th>\n",
+       "      <td>10.3</td>\n",
+       "      <td>1.0002</td>\n",
+       "      <td>medium</td>\n",
+       "      <td>low</td>\n",
+       "      <td>1</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>115</th>\n",
+       "      <td>10.4</td>\n",
+       "      <td>0.9926</td>\n",
+       "      <td>low</td>\n",
+       "      <td>medium</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>116</th>\n",
+       "      <td>9.1</td>\n",
+       "      <td>0.9934</td>\n",
+       "      <td>medium</td>\n",
+       "      <td>medium</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>117</th>\n",
+       "      <td>10.4</td>\n",
+       "      <td>0.9920</td>\n",
+       "      <td>medium</td>\n",
+       "      <td>low</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>118</th>\n",
+       "      <td>10.8</td>\n",
+       "      <td>0.9918</td>\n",
+       "      <td>low</td>\n",
+       "      <td>low</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "<p>119 rows × 5 columns</p>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "     alcohol  density fixed acidity level chlorides level  label\n",
+       "0       11.4   0.9917                 low             low      0\n",
+       "1        8.8   0.9976              medium             low      0\n",
+       "2        9.2   0.9934                 low          medium      0\n",
+       "3        8.7   1.0000              medium             low      0\n",
+       "4       12.6   0.9918              medium             low      0\n",
+       "..       ...      ...                 ...             ...    ...\n",
+       "114     10.3   1.0002              medium             low      1\n",
+       "115     10.4   0.9926                 low          medium      0\n",
+       "116      9.1   0.9934              medium          medium      0\n",
+       "117     10.4   0.9920              medium             low      0\n",
+       "118     10.8   0.9918                 low             low      0\n",
+       "\n",
+       "[119 rows x 5 columns]"
+      ]
+     },
+     "execution_count": 31,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "wine_test"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 30,
+   "id": "editorial-business",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "y_pred_test = loaded_model.predict(wine_X)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 32,
+   "id": "grave-retirement",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>id</th>\n",
+       "      <th>label</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>0</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>1</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>2</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>3</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>4</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>...</th>\n",
+       "      <td>...</td>\n",
+       "      <td>...</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>114</th>\n",
+       "      <td>114</td>\n",
+       "      <td>1</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>115</th>\n",
+       "      <td>115</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>116</th>\n",
+       "      <td>116</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>117</th>\n",
+       "      <td>117</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>118</th>\n",
+       "      <td>118</td>\n",
+       "      <td>0</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "<p>119 rows × 2 columns</p>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "      id  label\n",
+       "0      0      0\n",
+       "1      1      0\n",
+       "2      2      0\n",
+       "3      3      0\n",
+       "4      4      0\n",
+       "..   ...    ...\n",
+       "114  114      1\n",
+       "115  115      0\n",
+       "116  116      0\n",
+       "117  117      0\n",
+       "118  118      0\n",
+       "\n",
+       "[119 rows x 2 columns]"
+      ]
+     },
+     "execution_count": 32,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "results = pd.DataFrame({'id': wine_test.index, 'label': y_pred_test})\n",
+    "results"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "falling-marsh",
+   "metadata": {},
+   "source": [
+    "## Predict New Observation"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 37,
+   "id": "sustained-rebate",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>alcohol</th>\n",
+       "      <th>density</th>\n",
+       "      <th>fixed acidity level</th>\n",
+       "      <th>chlorides level</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>61</th>\n",
+       "      <td>8.9</td>\n",
+       "      <td>0.9972</td>\n",
+       "      <td>low</td>\n",
+       "      <td>low</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>293</th>\n",
+       "      <td>9.8</td>\n",
+       "      <td>1.0007</td>\n",
+       "      <td>low</td>\n",
+       "      <td>low</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>350</th>\n",
+       "      <td>11.4</td>\n",
+       "      <td>0.9964</td>\n",
+       "      <td>low</td>\n",
+       "      <td>low</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>262</th>\n",
+       "      <td>10.2</td>\n",
+       "      <td>0.9944</td>\n",
+       "      <td>medium</td>\n",
+       "      <td>low</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>361</th>\n",
+       "      <td>8.9</td>\n",
+       "      <td>0.9941</td>\n",
+       "      <td>medium</td>\n",
+       "      <td>medium</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "     alcohol  density fixed acidity level chlorides level\n",
+       "61       8.9   0.9972                 low             low\n",
+       "293      9.8   1.0007                 low             low\n",
+       "350     11.4   0.9964                 low             low\n",
+       "262     10.2   0.9944              medium             low\n",
+       "361      8.9   0.9941              medium          medium"
+      ]
+     },
+     "execution_count": 37,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "X_train_val.head()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 40,
+   "id": "interested-input",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdin",
+     "output_type": "stream",
+     "text": [
+      "Berapa kadar alkoholnya?:  10.2\n",
+      "Berapa kepekatannya?:  0.99\n",
+      "tingkat keasaman?:  medium\n",
+      "tingkat chlorides?:  low\n"
+     ]
+    },
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Low Quality\n",
+      "[[9.99984247e-01 1.57533497e-05]]\n"
+     ]
+    }
+   ],
+   "source": [
+    "# front-end\n",
+    "alcohol = float(input('Berapa kadar alkoholnya?: '))\n",
+    "density = float(input('Berapa kepekatannya?: '))\n",
+    "acidity_level = input('tingkat keasaman?: ')\n",
+    "chlorides_level = input('tingkat chlorides?: ')\n",
+    "\n",
+    "#back-end\n",
+    "df = pd.DataFrame([[alcohol, density, acidity_level, chlorides_level]], columns=X_train_val.columns, index=[0])\n",
+    "class_label = loaded_model.predict(df)[0]\n",
+    "proba = loaded_model.predict_proba(df)\n",
+    "\n",
+    "if class_label == 0:\n",
+    "    print('Low Quality')\n",
+    "else:\n",
+    "    print('High Quality')\n",
+    "    \n",
+    "print(proba)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "corresponding-fifty",
+   "metadata": {},
+   "source": [
+    "## Joblib"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 41,
+   "id": "immediate-friday",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "['logit_tuned']"
+      ]
+     },
+     "execution_count": 41,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "# save\n",
+    "joblib.dump(logit_tuned, 'logit_tuned')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 42,
+   "id": "gentle-lucas",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# load\n",
+    "model_joblib = joblib.load('logit_tuned')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 43,
+   "id": "confirmed-kingdom",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "Pipeline(steps=[('preprocess',\n",
+       "                 ColumnTransformer(transformers=[('poly',\n",
+       "                                                  PolynomialFeatures(degree=3,\n",
+       "                                                                     include_bias=False),\n",
+       "                                                  ['alcohol', 'density']),\n",
+       "                                                 ('onehot',\n",
+       "                                                  OneHotEncoder(drop='first'),\n",
+       "                                                  ['fixed acidity level',\n",
+       "                                                   'chlorides level'])])),\n",
+       "                ('clf',\n",
+       "                 LogisticRegression(C=100, random_state=2020,\n",
+       "                                    solver='liblinear'))])"
+      ]
+     },
+     "execution_count": 43,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "model_joblib"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 44,
+   "id": "jewish-tanzania",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Low Quality\n",
+      "[[9.99984247e-01 1.57533497e-05]]\n"
+     ]
+    }
+   ],
+   "source": [
+    "class_label = model_joblib.predict(df)[0]\n",
+    "proba = model_joblib.predict_proba(df)\n",
+    "\n",
+    "if class_label == 0:\n",
+    "    print('Low Quality')\n",
+    "else:\n",
+    "    print('High Quality')\n",
+    "    \n",
+    "print(proba)"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.7.4"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}
